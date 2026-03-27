@@ -18,23 +18,23 @@
           ItemsSource="{Binding Source={StaticResource ticketsViewSource}}" 
           Margin="13,25,43,249" RowDetailsVisibilityMode="VisibleWhenSelected">
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Title}" Header="Title" Width="*"/>
-                <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="2*"/>
-                <DataGridTextColumn Binding="{Binding State}" Header="State" Width="Auto"/>
-                <DataGridTextColumn Binding="{Binding Author.Name}" Header="Author" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding Title}" Header="Título" Width="*"/>
+                <DataGridTextColumn Binding="{Binding Description}" Header="Descripción" Width="2*"/>
+                <DataGridTextColumn Binding="{Binding State}" Header="Estado" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding Author.Name}" Header="Autor" Width="Auto"/>
             </DataGrid.Columns>
         </DataGrid>
 
-        <Label Content="Comments:" FontWeight="Bold" Margin="13,190,0,0" VerticalAlignment="Top" />
+        <Label Content="Comentarios:" FontWeight="Bold" Margin="13,190,0,0" VerticalAlignment="Top" />
         <DataGrid x:Name="commentsDataGrid" AutoGenerateColumns="False" 
           EnableRowVirtualization="True" 
           ItemsSource="{Binding Source={StaticResource commentsViewSource}}" 
           Margin="13,215,43,98" RowDetailsVisibilityMode="VisibleWhenSelected" 
           RenderTransformOrigin="0.488,0.251">
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Content}" Header="Content" Width="*"/>
-                <DataGridTextColumn Binding="{Binding Author.Name}" Header="Author" Width="Auto"/>
-                <DataGridTextColumn Binding="{Binding CreatedAt, StringFormat=\{0:g\}}" Header="Created At" Width="Auto" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding Content}" Header="Contenido" Width="*"/>
+                <DataGridTextColumn Binding="{Binding Author.Name}" Header="Autor" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding CreatedAt, StringFormat=\{0:g\}}" Header="Creada el" Width="Auto" IsReadOnly="True"/>
             </DataGrid.Columns>
         </DataGrid>
 

@@ -1,0 +1,9 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Incident.WPF" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="DbString" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Server=.;Database=IncidentDB;Trusted_Connection=True;TrustServerCertificate=True;</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

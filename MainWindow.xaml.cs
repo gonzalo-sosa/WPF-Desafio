@@ -17,14 +17,11 @@ namespace WPF_Desafio
         private readonly AppDbContext _context;
         private readonly CollectionViewSource ticketsViewSource;
 
-        public MainWindow()
+        public MainWindow(AppDbContext context)
         {
             InitializeComponent();
             ticketsViewSource = (CollectionViewSource)FindResource(nameof(ticketsViewSource));
-
-            var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
-            optionsBuilder.UseSqlServer("Server=.;Database=IncidentDB;Trusted_Connection=True;TrustServerCertificate=True;");
-            _context = new AppDbContext(optionsBuilder.Options);
+            _context = context;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -50,7 +47,6 @@ namespace WPF_Desafio
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            _context.Dispose();
             base.OnClosing(e);
         }
     }
