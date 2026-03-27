@@ -1,13 +1,11 @@
-﻿using System.Text;
+﻿using Incident.Domain.Entities;
+using Incident.Infrastructure.Data;
+using Incident.Infrastructure.Repositories.Implementations;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace WPF_Desafio
 {
@@ -16,9 +14,44 @@ namespace WPF_Desafio
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly AppDbContext _context;
+        private readonly CollectionViewSource ticketsViewSource;
+
         public MainWindow()
         {
             InitializeComponent();
+            ticketsViewSource = (CollectionViewSource)FindResource(nameof(ticketsViewSource));
+
+            var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
+            optionsBuilder.UseSqlServer("Server=.;Database=IncidentDB;Trusted_Connection=True;TrustServerCertificate=True;");
+            _context = new AppDbContext(optionsBuilder.Options);
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            DataSeeder.Initialize(_context);
+
+            _context.Tickets
+                .Include(t => t.Author)
+                .Include(t => t.Comments!)
+                    .ThenInclude(c => c.Author)
+                .Load();
+
+            ticketsViewSource.Source = _context.Tickets.Local.ToObservableCollection();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            _context.SaveChanges();
+
+            ticketsDataGrid.Items.Refresh();
+            commentsDataGrid.Items.Refresh();
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            _context.Dispose();
+            base.OnClosing(e);
         }
     }
 }

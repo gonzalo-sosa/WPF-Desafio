@@ -1,3 +1,5 @@
 <Solution>
-  <Project Path="WPF_Desafio.csproj" />
+  <Project Path="../Incident.Domain/Incident.Domain.csproj" />
+  <Project Path="../Incident.Infrastructure/Incident.Infrastructure.csproj" />
+  <Project Path="Incident.WPF.csproj" />
 </Solution>

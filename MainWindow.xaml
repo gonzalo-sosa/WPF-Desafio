@@ -5,8 +5,40 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPF_Desafio"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" Loaded="Window_Loaded">
+    <Window.Resources>
+        <CollectionViewSource x:Key="ticketsViewSource"/>
+        <CollectionViewSource x:Key="commentsViewSource" 
+                              Source="{Binding Comments, Source={StaticResource ticketsViewSource}}"/>
+    </Window.Resources>
     <Grid>
+        <Label Content="Tickets:" FontWeight="Bold" Margin="13,0,0,0" VerticalAlignment="Top" />
+        <DataGrid x:Name="ticketsDataGrid" AutoGenerateColumns="False" 
+          EnableRowVirtualization="True" 
+          ItemsSource="{Binding Source={StaticResource ticketsViewSource}}" 
+          Margin="13,25,43,249" RowDetailsVisibilityMode="VisibleWhenSelected">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Title}" Header="Title" Width="*"/>
+                <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="2*"/>
+                <DataGridTextColumn Binding="{Binding State}" Header="State" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding Author.Name}" Header="Author" Width="Auto"/>
+            </DataGrid.Columns>
+        </DataGrid>
 
+        <Label Content="Comments:" FontWeight="Bold" Margin="13,190,0,0" VerticalAlignment="Top" />
+        <DataGrid x:Name="commentsDataGrid" AutoGenerateColumns="False" 
+          EnableRowVirtualization="True" 
+          ItemsSource="{Binding Source={StaticResource commentsViewSource}}" 
+          Margin="13,215,43,98" RowDetailsVisibilityMode="VisibleWhenSelected" 
+          RenderTransformOrigin="0.488,0.251">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Content}" Header="Content" Width="*"/>
+                <DataGridTextColumn Binding="{Binding Author.Name}" Header="Author" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding CreatedAt, StringFormat=\{0:g\}}" Header="Created At" Width="Auto" IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Button Content="Save" HorizontalAlignment="Center" Margin="0,380,0,0" 
+        Click="Button_Click" Height="30" Width="123" VerticalAlignment="Top"/>
     </Grid>
 </Window>

@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using System.Data;
 using System.Windows;
 
@@ -9,6 +10,7 @@ namespace WPF_Desafio
     /// </summary>
     public partial class App : Application
     {
+      
     }
 
 }
