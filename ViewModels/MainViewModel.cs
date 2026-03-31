@@ -31,8 +31,9 @@ namespace Incident.WPF.ViewModels
                 OnPropertyChanged(nameof(Authors));
             }
         }
-        public PaginationViewModel Paginator { get; }
+        // Utils
         public SearchViewModel Search { get; }
+        public PaginationViewModel Paginator { get; }
         // Comandos
         public ICommand SaveCommand { get; }
 
@@ -40,12 +41,12 @@ namespace Incident.WPF.ViewModels
         {
             _ticketService = ticketService;
 
-            // Inicializar Paginador y Búsqueda delegando sus respectivas acciones
-            Paginator = new PaginationViewModel(pageSize: 5, onPageChanged: LoadData);
             Search = new SearchViewModel(onSearchChanged: OnSearchChanged);
+            Paginator = new PaginationViewModel(pageSize: 5, onPageChanged: LoadData);
 
             SaveCommand = new RelayCommand(
-                execute: _ => SaveChanges()
+                execute: _ => SaveChanges(),
+                canExecute: _ => HasUnsavedChanges()
             );
 
             LoadData();
@@ -53,10 +54,8 @@ namespace Incident.WPF.ViewModels
 
         private void OnSearchChanged()
         {
-            // Resetear la página a 1 para evitar llamadas dobles a LoadData
-            Paginator.CurrentPage = 1;
+            Paginator.Reset();
 
-            // Cargar los datos filtrados
             LoadData();
         }
 

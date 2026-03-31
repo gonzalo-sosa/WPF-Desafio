@@ -2,9 +2,9 @@ using System.ComponentModel;
 
 namespace Incident.WPF.ViewModels
 {
-    public class SearchViewModel : INotifyPropertyChanged
+    public class SearchViewModel(Action onSearchChanged) : INotifyPropertyChanged
     {
-        private readonly Action _onSearchChanged;
+        private readonly Action _onSearchChanged = onSearchChanged;
 
         public string? Text
         {
@@ -18,11 +18,6 @@ namespace Incident.WPF.ViewModels
                     _onSearchChanged(); // Notificar al padre que la búsqueda cambió
                 }
             }
-        }
-
-        public SearchViewModel(Action onSearchChanged)
-        {
-            _onSearchChanged = onSearchChanged;
         }
 
         public void Clear()

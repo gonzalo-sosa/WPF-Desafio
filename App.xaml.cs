@@ -22,8 +22,9 @@ namespace WPF_Desafio
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            base.OnStartup(e);
+            base.OnStartup(e); // Flujo normal de inicio
 
+            // Inyectar dependencias e iniciar MainWindow
             var serviceCollection = new ServiceCollection();
             ConfigureServices(serviceCollection);
 

@@ -49,11 +49,13 @@ namespace Incident.WPF.ViewModels
             _onPageChanged = onPageChanged;
 
             NextPageCommand = new RelayCommand(
-                execute: _ => { if (CurrentPage < TotalPages) { CurrentPage++; _onPageChanged(); } }
+                execute: _ => { CurrentPage++; _onPageChanged(); },
+                canExecute: _ => CurrentPage < TotalPages
             );
 
             PrevPageCommand = new RelayCommand(
-                execute: _ => { if (CurrentPage > 1) { CurrentPage--; _onPageChanged(); } }
+                execute: _ => { CurrentPage--; _onPageChanged(); },
+                canExecute: _ => CurrentPage > 1
             );
         }
 
