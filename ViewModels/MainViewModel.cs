@@ -11,69 +11,53 @@ namespace Incident.WPF.ViewModels
     public class MainViewModel : INotifyPropertyChanged
     {
         private readonly ITicketService _ticketService;
-
-        private ObservableCollection<Ticket>? _tickets;
         public ObservableCollection<Ticket>? Tickets
         {
-            get => _tickets;
+            get;
             set
             {
-                _tickets = value;
+                field = value;
                 OnPropertyChanged(nameof(Tickets));
             }
         }
-
-        private ObservableCollection<User>? _authors;
         public ObservableCollection<User>? Authors
         {
-            get => _authors;
+            get;
             set
             {
-                _authors = value;
+                field = value;
                 OnPropertyChanged(nameof(Authors));
             }
         }
-
-        private int _currentPage = 1;
-        private int _pageSize = 5;
-        private int _totalPages = 1;
-
-        public int CurrentPage
-        {
-            get => _currentPage;
-            set { if (_currentPage != value) { _currentPage = value; OnPropertyChanged(nameof(CurrentPage)); OnPropertyChanged(nameof(PageInfo)); } }
-        }
-
-        public int TotalPages
-        {
-            get => _totalPages;
-            set { if (_totalPages != value) { _totalPages = value; OnPropertyChanged(nameof(TotalPages)); OnPropertyChanged(nameof(PageInfo)); } }
-        }
-
-        public string PageInfo => $"Pág. {CurrentPage} de {Math.Max(1, TotalPages)}";
-
+        public PaginationViewModel Paginator { get; }
+        public SearchViewModel Search { get; }
         public ICommand SaveCommand { get; }
-        public ICommand NextPageCommand { get; }
-        public ICommand PrevPageCommand { get; }
 
         public MainViewModel(ITicketService ticketService)
         {
             _ticketService = ticketService;
-            
+
+            // Inicializar Paginador y Búsqueda delegando sus respectivas acciones
+            Paginator = new PaginationViewModel(pageSize: 5, onPageChanged: LoadData);
+            Search = new SearchViewModel(onSearchChanged: OnSearchChanged);
+
             SaveCommand = new RelayCommand(
                 execute: _ => SaveChanges()
-            );
-            NextPageCommand = new RelayCommand(
-                execute: _ => { if (CurrentPage < TotalPages) { CurrentPage++; LoadData(); } }
-            );
-            PrevPageCommand = new RelayCommand(
-                execute: _ => { if (CurrentPage > 1) { CurrentPage--; LoadData(); } }
             );
 
             LoadData();
         }
 
-        private async void LoadData() 
+        private void OnSearchChanged()
+        {
+            // Resetear la página a 1 para evitar llamadas dobles a LoadData
+            Paginator.CurrentPage = 1;
+
+            // Cargar los datos filtrados
+            LoadData();
+        }
+
+        private async void LoadData()
         {
             if (Authors == null)
             {
@@ -81,32 +65,19 @@ namespace Incident.WPF.ViewModels
                 Authors = new ObservableCollection<User>(users);
             }
 
-            var result = await _ticketService.GetTicketsPaginatedAsync(SearchText, CurrentPage, _pageSize);
+            // Usar estado de Search y Paginator
+            var result = await _ticketService.GetTicketsPaginatedAsync(Search.Text, Paginator.CurrentPage, Paginator.PageSize);
 
-            TotalPages = (int)Math.Ceiling(result.TotalItems / (double)_pageSize);
-            if (CurrentPage > TotalPages) CurrentPage = Math.Max(1, TotalPages);
+            // Actualizar total de páginas
+            Paginator.UpdateTotalPages(result.TotalItems);
 
             Tickets = new ObservableCollection<Ticket>(result.Tickets);
         }
 
-        private void SaveChanges() {
+        private void SaveChanges()
+        {
             _ticketService.SaveChanges();
             MessageBox.Show("Cambios guardados con éxito.");
-        }
-
-        public string? SearchText
-        {
-            get => field;
-            set
-            {
-                if (field != value)
-                {
-                    field = value;
-                    OnPropertyChanged(nameof(SearchText));
-                    CurrentPage = 1; // Reiniciar página al buscar
-                    LoadData();
-                }
-            }
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

@@ -46,35 +46,35 @@
 
         <TextBox Grid.Row="2" x:Name="ticketsSearch" Margin="0,0,0,10" Height="25" VerticalContentAlignment="Center">
             <TextBox.Text >
-                <Binding Path="SearchText" UpdateSourceTrigger="PropertyChanged" Delay="500" />
+                <Binding Path="Search.Text" UpdateSourceTrigger="PropertyChanged" Delay="500" />
             </TextBox.Text>
         </TextBox>
 
         <!-- Grilla de datos de Tickets -->
         <Label Grid.Row="3" Content="Tickets:" Margin="0,0,0,5" Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
         <DataGrid Grid.Row="4" x:Name="ticketsDataGrid" AutoGenerateColumns="False" 
-          EnableRowVirtualization="True" 
+          EnableRowVirtualization="True" VerticalAlignment="Top"
           ItemsSource="{Binding Source={StaticResource ticketsViewSource}}" 
           Margin="0,0,0,5" RowDetailsVisibilityMode="VisibleWhenSelected">
             <DataGrid.Columns>
+                <DataGridComboBoxColumn SelectedItemBinding="{Binding State}" ItemsSource="{Binding Source={StaticResource ticketStateEnum}}" Header="Estado" Width="Auto"/>
                 <DataGridTextColumn Binding="{Binding Title}" Header="Título" Width="*"/>
                 <DataGridTextColumn Binding="{Binding Description}" Header="Descripción" Width="2*"/>
-                <DataGridComboBoxColumn SelectedItemBinding="{Binding State}" ItemsSource="{Binding Source={StaticResource ticketStateEnum}}" Header="Estado" Width="Auto"/>
                 <DataGridTextColumn Binding="{Binding Author.Name}" Header="Autor" Width="Auto"/>
             </DataGrid.Columns>
         </DataGrid>
 
         <!-- Controles de Paginación -->
         <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,10">
-            <Button x:Name="btnPrevPage" Content="&lt; Anterior" Command="{Binding PrevPageCommand}" Width="75" Margin="0,0,10,0" Padding="5,2"/>
-            <TextBlock x:Name="txtPageInfo" Text="{Binding PageInfo}" VerticalAlignment="Center" FontWeight="Medium"/>
-            <Button x:Name="btnNextPage" Content="Siguiente &gt;" Command="{Binding NextPageCommand}" Width="75" Margin="10,0,0,0" Padding="5,2"/>
+            <Button x:Name="btnPrevPage" Content="&lt; Anterior" Command="{Binding Paginator.PrevPageCommand}" Width="75" Margin="0,0,10,0" Padding="5,2"/>
+            <TextBlock x:Name="txtPageInfo" Text="{Binding Paginator.PageInfo}" VerticalAlignment="Center" FontWeight="Medium"/>
+            <Button x:Name="btnNextPage" Content="Siguiente &gt;" Command="{Binding Paginator.NextPageCommand}" Width="75" Margin="10,0,0,0" Padding="5,2"/>
         </StackPanel>
 
         <!-- Grilla de datos de Comentarios -->
         <Label Grid.Row="6" Content="Comentarios:" Margin="0,0,0,5" Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
         <DataGrid Grid.Row="7" x:Name="commentsDataGrid" AutoGenerateColumns="False" 
-          EnableRowVirtualization="True" 
+          EnableRowVirtualization="True" VerticalAlignment="Top"
           ItemsSource="{Binding Source={StaticResource commentsViewSource}}" 
           Margin="0,0,0,10" RowDetailsVisibilityMode="VisibleWhenSelected">
             <DataGrid.Columns>
