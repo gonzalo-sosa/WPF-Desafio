@@ -57,10 +57,36 @@
           ItemsSource="{Binding Source={StaticResource ticketsViewSource}}" 
           Margin="0,0,0,5" RowDetailsVisibilityMode="VisibleWhenSelected">
             <DataGrid.Columns>
-                <DataGridComboBoxColumn SelectedItemBinding="{Binding State}" ItemsSource="{Binding Source={StaticResource ticketStateEnum}}" Header="Estado" Width="Auto"/>
+                <DataGridTemplateColumn Header="Estado" Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding State}" VerticalAlignment="Center" Margin="4,0" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <ComboBox SelectedItem="{Binding State, UpdateSourceTrigger=PropertyChanged}" 
+                                      ItemsSource="{Binding Source={StaticResource ticketStateEnum}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTextColumn Binding="{Binding Title}" Header="Título" Width="*"/>
                 <DataGridTextColumn Binding="{Binding Description}" Header="Descripción" Width="2*"/>
-                <DataGridTextColumn Binding="{Binding Author.Name}" Header="Autor" Width="Auto"/>
+
+                <DataGridTemplateColumn Header="Autor" Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Author.Name}" VerticalAlignment="Center" Margin="4,0" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <ComboBox SelectedItem="{Binding Author, UpdateSourceTrigger=PropertyChanged}" 
+                                      DisplayMemberPath="Name"
+                                      ItemsSource="{Binding Source={StaticResource authorsViewSource}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
 
@@ -79,7 +105,20 @@
           Margin="0,0,0,10" RowDetailsVisibilityMode="VisibleWhenSelected">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Content}" Header="Contenido" Width="*"/>
-                <DataGridComboBoxColumn Header="Autor" Width="Auto" SelectedItemBinding="{Binding Author}" DisplayMemberPath="Name" ItemsSource="{Binding Source={StaticResource authorsViewSource}}" />
+                <DataGridTemplateColumn Header="Autor" Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Author.Name}" VerticalAlignment="Center" Margin="4,0" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <ComboBox SelectedItem="{Binding Author, UpdateSourceTrigger=PropertyChanged}" 
+                                      DisplayMemberPath="Name"
+                                      ItemsSource="{Binding Source={StaticResource authorsViewSource}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTextColumn Binding="{Binding CreatedAt, StringFormat=\{0:g\}}" Header="Creada el" Width="Auto" IsReadOnly="True"/>
             </DataGrid.Columns>
         </DataGrid>

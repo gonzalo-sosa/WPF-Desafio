@@ -10,7 +10,9 @@ namespace Incident.WPF.ViewModels
 {
     public class MainViewModel : INotifyPropertyChanged
     {
+        // Servicios
         private readonly ITicketService _ticketService;
+        // Colecciones
         public ObservableCollection<Ticket>? Tickets
         {
             get;
@@ -31,6 +33,7 @@ namespace Incident.WPF.ViewModels
         }
         public PaginationViewModel Paginator { get; }
         public SearchViewModel Search { get; }
+        // Comandos
         public ICommand SaveCommand { get; }
 
         public MainViewModel(ITicketService ticketService)
@@ -78,6 +81,11 @@ namespace Incident.WPF.ViewModels
         {
             _ticketService.SaveChanges();
             MessageBox.Show("Cambios guardados con éxito.");
+        }
+
+        public bool HasUnsavedChanges()
+        {
+            return _ticketService.HasUnsavedChanges();
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
